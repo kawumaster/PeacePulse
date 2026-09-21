@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PeacePulse</title>
+<style>
+body{font-family:system-ui,Arial;margin:0;background:#f5f7fb;color:#172033}header{background:#111827;color:#fff;padding:28px}main{max-width:1000px;margin:auto;padding:24px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{background:#fff;padding:20px;border-radius:14px;box-shadow:0 4px 16px #0001}button{padding:11px 15px;border:0;border-radius:8px;background:#2457d6;color:white;cursor:pointer}textarea,select{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:8px}small{color:#667085}.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#eef2ff;margin:3px}
+</style></head>
+<body><header><h1>PeacePulse</h1><p>Detect early. Verify. Respond. Prevent conflict.</p></header>
+<main>
+<div class="card"><h2>Hackathon Demo</h2><p>Report → AI Triage → Human Verification → Alert → Mediation → Resolution</p><button onclick="runDemo()">Run Full Demo</button> <button onclick="resetDemo()">Reset Demo</button><p id="status"><small>Demo data is synthetic. AI is decision support, not a verdict.</small></p></div>
+<br><div class="grid">
+<div class="card"><h3>1. Report</h3><textarea id="report">A group dispute may lead to retaliation after a theft accusation. There are threats and reports of a blade being carried.</textarea><button onclick="triage()">Submit & Triage</button></div>
+<div class="card"><h3>2. AI Triage</h3><div id="triage"><small>No triage yet.</small></div></div>
+<div class="card"><h3>3. Human Verification</h3><div id="verify"><small>Pending report.</small></div><button onclick="verify()">Verify Report</button></div>
+<div class="card"><h3>4. Community Alert</h3><div id="alert"><small>No verified alert.</small></div></div>
+<div class="card"><h3>5. Mediation</h3><div id="mediation"><small>Awaiting verification.</small></div><button onclick="resolveCase()">Move to Resolution</button></div>
+<div class="card"><h3>6. Resolution</h3><div id="resolution"><small>Not resolved.</small></div></div>
+</div>
+<br><div class="card"><h3>Safety & Privacy</h3><p>Use anonymous reporting when appropriate. Do not expose exact addresses or personal identities. In immediate danger, use appropriate emergency or trusted local support. Production deployment requires secure backend storage, real authentication, encryption, retention controls and responsible AI evaluation.</p></div>
+</main>
+<script>
+let state={reported:false,verified:false,resolved:false};
+function triage(){state.reported=true;let t=document.getElementById('report').value.toLowerCase();let keys=['retaliation','threat','blade','weapon','crowd','theft'];let hits=keys.filter(k=>t.includes(k));let risk=hits.length>=3?'High':hits.length>=1?'Medium':'Low';document.getElementById('triage').innerHTML='<b>'+risk+' risk</b><br>Indicators: '+(hits.join(', ')||'none')+'<br><small>Decision support only; human verification required.</small>';document.getElementById('verify').innerHTML='Pending human review.';document.getElementById('status').textContent='Report created. AI triage completed.'}
+function verify(){if(!state.reported){alert('Submit a report first.');return}state.verified=true;document.getElementById('verify').innerHTML='<b>Verified by community responder</b>';document.getElementById('alert').innerHTML='<span class="pill">Verified Alert</span><p>Community safety information can now be shared.</p>';document.getElementById('mediation').innerHTML='<b>Alerted → Contacted → Mediation</b>';document.getElementById('status').textContent='Human verification completed.'}
+function resolveCase(){if(!state.verified){alert('Verify the report first.');return}state.resolved=true;document.getElementById('mediation').innerHTML='<b>Resolved</b><br>Neutral response outcome recorded.';document.getElementById('resolution').innerHTML='<b>Case resolved</b>';document.getElementById('status').textContent='End-to-end demo complete.'}
+function runDemo(){document.getElementById('report').value='A group dispute may lead to retaliation after a theft accusation. There are threats and reports of a blade being carried.';triage();setTimeout(verify,500);setTimeout(resolveCase,1000)}
+function resetDemo(){location.reload()}
+</script></body></html>
